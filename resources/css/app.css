@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+    html {
+        @apply scroll-smooth;
+    }
+
+    body {
+        @apply overflow-hidden bg-parchment font-sans text-espresso antialiased dark:bg-obsidian dark:text-parchment;
+        background-image:
+            theme('backgroundImage.habesha-fade'),
+            linear-gradient(180deg, #FDFBF7 0%, #F7F1E8 100%);
+    }
+
+    .dark body,
+    html.dark body {
+        background-image:
+            radial-gradient(circle at top left, rgba(212, 160, 23, 0.08), transparent 30%),
+            radial-gradient(circle at top right, rgba(196, 92, 62, 0.08), transparent 28%),
+            linear-gradient(180deg, #1A1412 0%, #241C19 100%);
+    }
+}
+
+@layer components {
+    .brand-mark {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full bg-espresso text-amber shadow-soft dark:bg-amber dark:text-obsidian;
+    }
+
+    .tibeb-bar {
+        @apply h-1.5 w-full bg-tibeb-edge;
+    }
+
+    .habesha-divider {
+        @apply flex items-center gap-3 text-amber/70;
+    }
+
+    .habesha-divider::before,
+    .habesha-divider::after {
+        content: '';
+        @apply h-px flex-1 bg-gradient-to-r from-transparent via-terracotta/40 to-transparent;
+    }
+
+    .panel {
+        @apply rounded-2xl border border-bean/10 bg-white/85 shadow-soft backdrop-blur dark:border-white/10 dark:bg-obsidian-card/90;
+    }
+
+    .stat-card {
+        @apply panel relative overflow-hidden p-4 sm:p-5;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl bg-terracotta px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-terracotta-soft focus:outline-none focus:ring-2 focus:ring-terracotta/40 disabled:opacity-50 dark:bg-amber dark:text-obsidian dark:hover:bg-amber-soft;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl border border-bean/15 bg-white px-4 py-2.5 text-sm font-semibold text-espresso transition hover:bg-parchment-soft focus:outline-none focus:ring-2 focus:ring-bean/20 dark:border-white/10 dark:bg-obsidian-soft dark:text-parchment dark:hover:bg-obsidian-card;
+    }
+
+    .btn-danger {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl bg-terracotta-deep px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90;
+    }
+
+    .btn-ghost {
+        @apply inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-bean transition hover:bg-bean/5 dark:text-parchment/70 dark:hover:bg-white/5;
+    }
+
+    .btn-icon {
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-xl border border-bean/10 bg-white text-espresso transition hover:border-terracotta/30 hover:text-terracotta dark:border-white/10 dark:bg-obsidian-soft dark:text-parchment dark:hover:border-amber/40 dark:hover:text-amber;
+    }
+
+    .field {
+        @apply block w-full rounded-xl border-bean/15 bg-white text-espresso shadow-sm focus:border-terracotta focus:ring-terracotta dark:border-white/10 dark:bg-obsidian-soft dark:text-parchment dark:focus:border-amber dark:focus:ring-amber;
+    }
+
+    .label {
+        @apply mb-1.5 block text-sm font-medium text-espresso/75 dark:text-parchment/70;
+    }
+
+    .badge {
+        @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold;
+    }
+
+    .badge-paid {
+        @apply badge bg-highland/10 text-highland dark:bg-highland/20 dark:text-emerald-300;
+    }
+
+    .badge-credit {
+        @apply badge bg-terracotta/10 text-terracotta-deep dark:bg-terracotta/20 dark:text-terracotta-soft;
+    }
+
+    .badge-soft {
+        @apply badge bg-amber/15 text-bean dark:bg-amber/20 dark:text-amber-soft;
+    }
+
+    .data-table {
+        @apply min-w-full text-sm;
+    }
+
+    .data-table thead {
+        @apply bg-espresso/95 text-left text-parchment dark:bg-obsidian;
+    }
+
+    .data-table th {
+        @apply px-4 py-3 text-xs font-semibold uppercase tracking-wide;
+    }
+
+    .data-table tbody tr {
+        @apply border-t border-bean/10 transition hover:bg-parchment-soft/80 dark:border-white/5 dark:hover:bg-white/[0.03];
+    }
+
+    .data-table td {
+        @apply px-4 py-3 align-middle;
+    }
+
+    .pill-option {
+        @apply cursor-pointer rounded-full border border-bean/15 bg-white px-3.5 py-2 text-sm font-medium text-espresso transition dark:border-white/10 dark:bg-obsidian-soft dark:text-parchment;
+    }
+
+    .pill-option-active {
+        @apply border-terracotta bg-terracotta text-white shadow-soft dark:border-amber dark:bg-amber dark:text-obsidian;
+    }
+
+    .mobile-nav-link {
+        @apply flex flex-1 flex-col items-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium text-espresso/55 dark:text-parchment/55;
+    }
+
+    .mobile-nav-link-active {
+        @apply text-terracotta dark:text-amber;
+    }
+
+    .progress-ring {
+        transform: rotate(-90deg);
+    }
+}

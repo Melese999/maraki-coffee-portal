@@ -1,0 +1,150 @@
+<x-app-layout>
+    <x-slot name="header">{{ __('Menu items') }}</x-slot>
+
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <p class="text-sm text-bean dark:text-parchment/60">{{ __('Active items available to sell at Maraki.') }}</p>
+        @can('menu.create')
+            <button type="button" class="btn-primary" x-data x-on:click="$dispatch('open-modal', 'create-menu')">
+                {{ __('Add menu item') }}
+            </button>
+        @endcan
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        @foreach ($items as $item)
+            <article class="panel group relative overflow-hidden p-5 transition hover:border-amber/30">
+                <div class="absolute -right-3 -top-3 text-amber/10 transition group-hover:text-amber/20">
+                    <x-ui.motif-cini class="h-16 w-16" />
+                </div>
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <h3 class="font-display text-xl">{{ $item->name }}</h3>
+                        <div class="mt-1 text-sm text-bean dark:text-parchment/60">{{ $item->unit }}</div>
+                    </div>
+                    <span @class([$item->is_active ? 'badge-paid' : 'badge-credit'])>
+                        {{ $item->is_active ? __('Active') : __('Hidden') }}
+                    </span>
+                </div>
+                <div class="mt-4 font-display text-2xl text-terracotta dark:text-amber">{{ \App\Support\Money::format($item->price) }}</div>
+                <div class="mt-4 flex gap-2">
+                    @can('menu.update')
+                        <x-ui.icon-button
+                            tone="edit"
+                            x-data
+                            x-on:click="$dispatch('open-modal', 'edit-menu-{{ $item->id }}')"
+                            aria-label="{{ __('Edit item') }}"
+                        >✎</x-ui.icon-button>
+                    @endcan
+                    @can('menu.delete')
+                        <x-ui.icon-button
+                            tone="danger"
+                            x-data
+                            x-on:click="$dispatch('open-modal', 'delete-menu-{{ $item->id }}')"
+                            aria-label="{{ __('Delete item') }}"
+                        >⌫</x-ui.icon-button>
+                    @endcan
+                </div>
+            </article>
+        @endforeach
+    </div>
+
+    <div class="mt-4">{{ $items->links() }}</div>
+
+    <div class="modals-root">
+        @can('menu.create')
+            <x-ui.dialog
+                name="create-menu"
+                :title="__('Add menu item')"
+                :subtitle="__('New drink or food available to sell.')"
+                maxWidth="lg"
+                :show="$errors->any() && old('_form') === 'menu-create'"
+            >
+                <form method="POST" action="{{ route('menu-items.store') }}" class="space-y-4">
+                    @csrf
+                    <input type="hidden" name="_form" value="menu-create">
+                    <div>
+                        <label class="label" for="name">{{ __('Name') }}</label>
+                        <input class="field" name="name" id="name" value="{{ old('name') }}" required>
+                    </div>
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div>
+                            <label class="label" for="price">{{ __('Price') }}</label>
+                            <input class="field" type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price') }}" required>
+                        </div>
+                        <div>
+                            <label class="label" for="unit">{{ __('Unit') }}</label>
+                            <input class="field" name="unit" id="unit" value="{{ old('unit', 'cup') }}" required>
+                        </div>
+                        <div>
+                            <label class="label" for="sort_order">{{ __('Sort') }}</label>
+                            <input class="field" type="number" min="0" name="sort_order" id="sort_order" value="{{ old('sort_order', 0) }}">
+                        </div>
+                    </div>
+                    <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" name="is_active" value="1" checked>
+                        {{ __('Available to sell') }}
+                    </label>
+                    <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+                        <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-menu')">{{ __('Cancel') }}</button>
+                        <button class="btn-primary">{{ __('Add item') }}</button>
+                    </div>
+                </form>
+            </x-ui.dialog>
+        @endcan
+
+        @foreach ($items as $item)
+            @can('menu.update')
+                <x-ui.dialog
+                    name="edit-menu-{{ $item->id }}"
+                    :title="__('Edit :name', ['name' => $item->name])"
+                    maxWidth="lg"
+                    :show="$errors->any() && old('_form') === 'menu-edit-'.$item->id"
+                >
+                    <form method="POST" action="{{ route('menu-items.update', $item) }}" class="space-y-4">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="_form" value="menu-edit-{{ $item->id }}">
+                        <div>
+                            <label class="label">{{ __('Name') }}</label>
+                            <input class="field" name="name" value="{{ old('name', $item->name) }}" required>
+                        </div>
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <div>
+                                <label class="label">{{ __('Price') }}</label>
+                                <input class="field" type="number" step="0.01" name="price" value="{{ old('price', $item->price) }}" required>
+                            </div>
+                            <div>
+                                <label class="label">{{ __('Unit') }}</label>
+                                <input class="field" name="unit" value="{{ old('unit', $item->unit) }}" required>
+                            </div>
+                            <div>
+                                <label class="label">{{ __('Sort') }}</label>
+                                <input class="field" type="number" name="sort_order" value="{{ old('sort_order', $item->sort_order) }}">
+                            </div>
+                        </div>
+                        <label class="inline-flex items-center gap-2 text-sm">
+                            <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $item->is_active))>
+                            {{ __('Active') }}
+                        </label>
+                        <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+                            <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'edit-menu-{{ $item->id }}')">{{ __('Cancel') }}</button>
+                            <button class="btn-primary">{{ __('Save changes') }}</button>
+                        </div>
+                    </form>
+                </x-ui.dialog>
+            @endcan
+
+            @can('menu.delete')
+                <x-ui.dialog name="delete-menu-{{ $item->id }}" :title="__('Remove menu item?')" maxWidth="md">
+                    <p class="text-sm text-bean dark:text-parchment/70">{{ __('Remove :name from the sellable menu?', ['name' => $item->name]) }}</p>
+                    <form method="POST" action="{{ route('menu-items.destroy', $item) }}" class="mt-6 flex justify-end gap-2">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'delete-menu-{{ $item->id }}')">{{ __('Cancel') }}</button>
+                        <button class="btn-danger">{{ __('Delete') }}</button>
+                    </form>
+                </x-ui.dialog>
+            @endcan
+        @endforeach
+    </div>
+</x-app-layout>
