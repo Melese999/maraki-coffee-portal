@@ -2,9 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full" x-data x-init="$store.theme.init()">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? config('app.name') }}</title>
+    @include('partials.pwa')
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|fraunces:500,600,700|noto-sans-ethiopic:400,500,600,700|noto-serif-ethiopic:500,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -95,6 +96,33 @@
                         <span x-show="! $store.theme.dark">☾</span>
                         <span x-show="$store.theme.dark" x-cloak>☀</span>
                     </button>
+                    <div
+                        x-data="{
+                            canInstall: Boolean(window.marakiInstallPrompt),
+                            init() {
+                                window.addEventListener('maraki-install-available', () => { this.canInstall = true });
+                            },
+                            async install() {
+                                const prompt = window.marakiInstallPrompt;
+                                if (! prompt) {
+                                    return;
+                                }
+                                prompt.prompt();
+                                await prompt.userChoice;
+                                window.marakiInstallPrompt = null;
+                                this.canInstall = false;
+                            }
+                        }"
+                        class="contents"
+                    >
+                        <button
+                            type="button"
+                            class="btn-secondary hidden py-1.5 text-xs sm:inline-flex"
+                            x-show="canInstall"
+                            x-cloak
+                            x-on:click="install"
+                        >{{ __('Install app') }}</button>
+                    </div>
                     <a href="{{ route('profile.edit') }}" class="rounded-full border border-bean/10 bg-white px-3 py-1.5 text-sm font-medium text-bean shadow-soft dark:border-white/10 dark:bg-obsidian-card dark:text-parchment/80">
                         {{ __('Profile') }}
                     </a>

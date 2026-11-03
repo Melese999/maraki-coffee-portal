@@ -24,7 +24,8 @@ class ExpenseController extends Controller
 
         $expenses = Expense::query()
             ->with(['category', 'recorder'])
-            ->whereBetween('expense_date', [$from->toDateString(), $to->toDateString()])
+            ->whereDate('expense_date', '>=', $from->toDateString())
+            ->whereDate('expense_date', '<=', $to->toDateString())
             ->latest()
             ->paginate(20)
             ->withQueryString();

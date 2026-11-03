@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\MenuItem;
 use App\Models\Sale;
 use App\Models\User;
+use App\Support\Money;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -47,6 +48,35 @@ class SaleDateFilterTest extends TestCase
             ->assertSee((string) $inRange->total)
             ->assertDontSee((string) $outOfRange->total)
             ->assertSee($inRange->sale_date->translatedFormat('M j, Y'));
+    }
+
+    public function test_sales_index_lists_sales_when_from_and_to_are_the_same_day(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('Cashier');
+
+        // Mimic SQLite datetime storage that broke date-only whereBetween bounds.
+        $todaySale = Sale::factory()->create([
+            'recorded_by' => $user->id,
+            'sale_date' => today()->startOfDay(),
+            'total' => 4920,
+            'amount_paid' => 4920,
+        ]);
+
+        $otherDaySale = Sale::factory()->create([
+            'recorded_by' => $user->id,
+            'sale_date' => today()->subDay()->startOfDay(),
+            'total' => 20000,
+            'amount_paid' => 20000,
+        ]);
+
+        $today = today()->toDateString();
+
+        $this->actingAs($user)
+            ->get(route('sales.index', ['from' => $today, 'to' => $today]))
+            ->assertOk()
+            ->assertSee(Money::format($todaySale->total))
+            ->assertDontSee(Money::format($otherDaySale->total));
     }
 
     public function test_recording_sale_redirects_to_index_with_date_filter(): void

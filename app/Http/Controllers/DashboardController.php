@@ -61,27 +61,30 @@ class DashboardController extends Controller
         $openLoanTotal = $openLoans->sum(fn (Investment $loan) => $loan->outstanding());
 
         $cups = (int) SaleItem::query()
-            ->whereHas('sale', fn ($q) => $q->whereBetween('sale_date', [$fromDay, $toDay]))
+            ->whereHas('sale', fn ($q) => $q->whereDate('sale_date', '>=', $fromDay)->whereDate('sale_date', '<=', $toDay))
             ->sum('quantity');
 
         $previousCups = (int) SaleItem::query()
-            ->whereHas('sale', fn ($q) => $q->whereBetween('sale_date', [
-                $previousFrom->toDateString(),
-                $previousTo->toDateString(),
-            ]))
+            ->whereHas('sale', fn ($q) => $q
+                ->whereDate('sale_date', '>=', $previousFrom->toDateString())
+                ->whereDate('sale_date', '<=', $previousTo->toDateString()))
             ->sum('quantity');
 
         $salesCount = (int) Sale::query()
-            ->whereBetween('sale_date', [$fromDay, $toDay])
+            ->whereDate('sale_date', '>=', $fromDay)
+            ->whereDate('sale_date', '<=', $toDay)
             ->count();
 
         $averageTicket = $salesCount > 0
-            ? round(((float) Sale::query()->whereBetween('sale_date', [$fromDay, $toDay])->sum('total')) / $salesCount, 2)
+            ? round(((float) Sale::query()
+                ->whereDate('sale_date', '>=', $fromDay)
+                ->whereDate('sale_date', '<=', $toDay)
+                ->sum('total')) / $salesCount, 2)
             : 0;
 
         $topItems = SaleItem::query()
             ->select('item_name', DB::raw('SUM(quantity) as qty'), DB::raw('SUM(line_total) as revenue'))
-            ->whereHas('sale', fn ($q) => $q->whereBetween('sale_date', [$fromDay, $toDay]))
+            ->whereHas('sale', fn ($q) => $q->whereDate('sale_date', '>=', $fromDay)->whereDate('sale_date', '<=', $toDay))
             ->groupBy('item_name')
             ->orderByDesc('qty')
             ->limit(5)
@@ -92,7 +95,8 @@ class DashboardController extends Controller
         $expenseBreakdown = Expense::query()
             ->select('expense_category_id', DB::raw('SUM(amount) as total'))
             ->with('category:id,name')
-            ->whereBetween('expense_date', [$fromDay, $toDay])
+            ->whereDate('expense_date', '>=', $fromDay)
+            ->whereDate('expense_date', '<=', $toDay)
             ->groupBy('expense_category_id')
             ->orderByDesc('total')
             ->limit(5)

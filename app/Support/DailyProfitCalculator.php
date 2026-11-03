@@ -55,17 +55,20 @@ class DailyProfitCalculator
         $toDay = $to->toDateString();
 
         $cashSales = (float) Sale::query()
-            ->whereBetween('sale_date', [$fromDay, $toDay])
+            ->whereDate('sale_date', '>=', $fromDay)
+            ->whereDate('sale_date', '<=', $toDay)
             ->where('payment_status', PaymentStatus::Paid)
             ->whereDoesntHave('creditPayments')
             ->sum('amount_paid');
 
         $creditCollections = (float) CreditPayment::query()
-            ->whereBetween('payment_date', [$fromDay, $toDay])
+            ->whereDate('payment_date', '>=', $fromDay)
+            ->whereDate('payment_date', '<=', $toDay)
             ->sum('amount');
 
         $expenses = (float) Expense::query()
-            ->whereBetween('expense_date', [$fromDay, $toDay])
+            ->whereDate('expense_date', '>=', $fromDay)
+            ->whereDate('expense_date', '<=', $toDay)
             ->sum('amount');
 
         $cashCollected = $cashSales + $creditCollections;
