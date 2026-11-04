@@ -28,10 +28,10 @@
         x-on:click="$store.sidebar.close()"
     ></div>
 
-    {{-- Sidebar: off-canvas on mobile, fixed on desktop --}}
+    {{-- Sidebar: off-canvas on mobile (closed by default), fixed on desktop --}}
     <aside
-        class="fixed inset-y-0 left-0 z-50 m-0 flex w-64 max-w-[85vw] flex-col border-r border-bean/10 bg-espresso p-0 text-parchment transition-transform duration-300 dark:border-white/5 dark:bg-obsidian md:translate-x-0"
-        :class="$store.sidebar.open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+        class="fixed inset-y-0 left-0 z-50 m-0 flex w-64 max-w-[85vw] -translate-x-full flex-col border-r border-bean/10 bg-espresso p-0 text-parchment transition-transform duration-300 dark:border-white/5 dark:bg-obsidian md:translate-x-0"
+        :class="{ '!translate-x-0': $store.sidebar.open }"
         x-on:keydown.escape.window="$store.sidebar.close()"
     >
         <div class="tibeb-bar shrink-0"></div>
