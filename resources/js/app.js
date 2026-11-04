@@ -23,12 +23,22 @@ document.addEventListener('alpine:init', () => {
         open: false,
         toggle() {
             this.open = ! this.open;
-            document.body.classList.toggle('overflow-hidden', this.open && window.innerWidth < 768);
+            this.syncBodyScroll();
         },
         close() {
             this.open = false;
-            document.body.classList.remove('overflow-hidden');
+            this.syncBodyScroll();
         },
+        syncBodyScroll() {
+            const lock = this.open && window.matchMedia('(max-width: 767px)').matches;
+            document.body.classList.toggle('overflow-hidden', lock);
+        },
+    });
+
+    window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
+        if (event.matches && window.Alpine?.store('sidebar')) {
+            window.Alpine.store('sidebar').close();
+        }
     });
 });
 
