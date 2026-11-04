@@ -18,6 +18,18 @@ document.addEventListener('alpine:init', () => {
             document.documentElement.classList.toggle('dark', this.dark);
         },
     });
+
+    Alpine.store('sidebar', {
+        open: false,
+        toggle() {
+            this.open = ! this.open;
+            document.body.classList.toggle('overflow-hidden', this.open && window.innerWidth < 768);
+        },
+        close() {
+            this.open = false;
+            document.body.classList.remove('overflow-hidden');
+        },
+    });
 });
 
 Alpine.start();
