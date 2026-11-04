@@ -52,7 +52,7 @@
             x-transition:leave="ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-obsidian/50 backdrop-blur-md dark:bg-black/60"
+            class="fixed inset-0 bg-espresso/70 backdrop-blur-md dark:bg-black/70"
             x-on:click="close()"
             aria-hidden="true"
         ></div>
@@ -68,28 +68,30 @@
             role="dialog"
             aria-modal="true"
             aria-labelledby="dialog-title-{{ $name }}"
-            class="relative z-10 flex w-full {{ $maxWidthClass }} max-h-[min(92vh,880px)] flex-col overflow-hidden rounded-3xl border border-bean/10 bg-parchment shadow-modal dark:border-white/10 dark:bg-obsidian-card"
+            class="dialog-panel relative z-10 flex w-full {{ $maxWidthClass }} max-h-[min(92vh,880px)] flex-col overflow-hidden"
             {{ $attributes }}
         >
-            <div class="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-bean/10 bg-parchment/95 px-5 py-4 backdrop-blur dark:border-white/10 dark:bg-obsidian-card/95">
+            <div class="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-amber/20 bg-[#1C120C]/95 px-5 py-4 backdrop-blur">
                 <div class="min-w-0">
-                    <div class="tibeb-bar mb-3 rounded-full opacity-80"></div>
-                    <h2 id="dialog-title-{{ $name }}" class="font-display text-xl text-espresso dark:text-parchment">{{ $title }}</h2>
+                    <h2 id="dialog-title-{{ $name }}" class="text-lg font-extrabold text-amber">{{ $title }}</h2>
                     @if ($subtitle)
-                        <p class="mt-1 text-sm text-bean dark:text-parchment/60">{{ $subtitle }}</p>
+                        <p class="mt-1 text-sm text-parchment/55">{{ $subtitle }}</p>
                     @endif
                 </div>
-                <button type="button" class="btn-icon shrink-0" x-on:click="close()" aria-label="{{ __('Close') }}">
-                    <span class="text-lg leading-none">&times;</span>
-                </button>
+                <button
+                    type="button"
+                    class="shrink-0 text-2xl leading-none text-amber-soft transition hover:text-amber"
+                    x-on:click="close()"
+                    aria-label="{{ __('Close') }}"
+                >&times;</button>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-5 py-4">
+            <div class="dialog-body flex-1 overflow-y-auto px-5 py-4">
                 {{ $slot }}
             </div>
 
             @isset($footer)
-                <div class="sticky bottom-0 z-10 flex flex-wrap items-center justify-end gap-2 border-t border-bean/10 bg-parchment/95 px-5 py-4 backdrop-blur dark:border-white/10 dark:bg-obsidian-card/95">
+                <div class="sticky bottom-0 z-10 flex flex-wrap items-center justify-end gap-2 border-t border-amber/20 bg-[#1C120C]/95 px-5 py-4 backdrop-blur">
                     {{ $footer }}
                 </div>
             @endisset

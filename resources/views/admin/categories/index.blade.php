@@ -31,14 +31,17 @@
             <form method="POST" action="{{ route('admin.categories.store') }}" class="space-y-4">
                 @csrf
                 <input type="hidden" name="_form" value="category-create">
-                <div>
-                    <label class="label">{{ __('Name') }}</label>
-                    <input class="field" name="name" value="{{ old('name') }}" required>
-                </div>
-                <label class="inline-flex items-center gap-2 text-sm">
-                    <input type="checkbox" name="is_active" value="1" checked> {{ __('Active') }}
-                </label>
-                <div class="flex justify-end gap-2 pt-2">
+                <section class="dialog-section">
+                    <h3 class="dialog-section-title">{{ __('Category') }}</h3>
+                    <div>
+                        <label class="label">{{ __('Name') }}</label>
+                        <input class="field" name="name" value="{{ old('name') }}" required>
+                    </div>
+                    <label class="mt-4 inline-flex items-center gap-2 text-sm text-parchment/80">
+                        <input type="checkbox" name="is_active" value="1" checked> {{ __('Active') }}
+                    </label>
+                </section>
+                <div class="dialog-actions">
                     <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-category')">{{ __('Cancel') }}</button>
                     <button class="btn-primary">{{ __('Add') }}</button>
                 </div>
@@ -50,14 +53,17 @@
                 <form method="POST" action="{{ route('admin.categories.update', $category) }}" class="space-y-4">
                     @csrf
                     @method('PUT')
-                    <div>
-                        <label class="label">{{ __('Name') }}</label>
-                        <input class="field" name="name" value="{{ $category->name }}" required>
-                    </div>
-                    <label class="inline-flex items-center gap-2 text-sm">
-                        <input type="checkbox" name="is_active" value="1" @checked($category->is_active)> {{ __('Active') }}
-                    </label>
-                    <div class="flex justify-end gap-2 pt-2">
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Category') }}</h3>
+                        <div>
+                            <label class="label">{{ __('Name') }}</label>
+                            <input class="field" name="name" value="{{ $category->name }}" required>
+                        </div>
+                        <label class="mt-4 inline-flex items-center gap-2 text-sm text-parchment/80">
+                            <input type="checkbox" name="is_active" value="1" @checked($category->is_active)> {{ __('Active') }}
+                        </label>
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'edit-category-{{ $category->id }}')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Save') }}</button>
                     </div>

@@ -57,32 +57,35 @@
                 <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="_form" value="user-create">
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="label">{{ __('Name') }}</label>
-                            <input class="field" name="name" value="{{ old('name') }}" required>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Identity & contact') }}</h3>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="label">{{ __('Name') }}</label>
+                                <input class="field" name="name" value="{{ old('name') }}" required>
+                            </div>
+                            <div>
+                                <label class="label">{{ __('Email') }}</label>
+                                <input class="field" type="email" name="email" value="{{ old('email') }}" required>
+                            </div>
+                            <div>
+                                <label class="label">{{ __('Password') }}</label>
+                                <input class="field" type="password" name="password" required>
+                            </div>
+                            <div>
+                                <label class="label">{{ __('Role') }}</label>
+                                <select class="field" name="role" required>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div>
-                            <label class="label">{{ __('Email') }}</label>
-                            <input class="field" type="email" name="email" value="{{ old('email') }}" required>
-                        </div>
-                        <div>
-                            <label class="label">{{ __('Password') }}</label>
-                            <input class="field" type="password" name="password" required>
-                        </div>
-                        <div>
-                            <label class="label">{{ __('Role') }}</label>
-                            <select class="field" name="role" required>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <label class="inline-flex items-center gap-2 text-sm">
-                        <input type="checkbox" name="is_active" value="1" checked> {{ __('Active') }}
-                    </label>
-                    <div class="flex justify-end gap-2 pt-2">
+                        <label class="mt-4 inline-flex items-center gap-2 text-sm text-parchment/80">
+                            <input type="checkbox" name="is_active" value="1" checked> {{ __('Active') }}
+                        </label>
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-user')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Create') }}</button>
                     </div>
@@ -96,32 +99,35 @@
                     <form method="POST" action="{{ route('admin.users.update', $user) }}" class="space-y-4">
                         @csrf
                         @method('PUT')
-                        <div class="grid gap-4 sm:grid-cols-2">
-                            <div>
-                                <label class="label">{{ __('Name') }}</label>
-                                <input class="field" name="name" value="{{ $user->name }}" required>
+                        <section class="dialog-section">
+                            <h3 class="dialog-section-title">{{ __('Identity & contact') }}</h3>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label class="label">{{ __('Name') }}</label>
+                                    <input class="field" name="name" value="{{ $user->name }}" required>
+                                </div>
+                                <div>
+                                    <label class="label">{{ __('Email') }}</label>
+                                    <input class="field" type="email" name="email" value="{{ $user->email }}" required>
+                                </div>
+                                <div>
+                                    <label class="label">{{ __('New password') }}</label>
+                                    <input class="field" type="password" name="password" placeholder="{{ __('Optional') }}">
+                                </div>
+                                <div>
+                                    <label class="label">{{ __('Role') }}</label>
+                                    <select class="field" name="role" required>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->name }}" @selected($user->hasRole($role->name))>{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <label class="label">{{ __('Email') }}</label>
-                                <input class="field" type="email" name="email" value="{{ $user->email }}" required>
-                            </div>
-                            <div>
-                                <label class="label">{{ __('New password') }}</label>
-                                <input class="field" type="password" name="password" placeholder="{{ __('Optional') }}">
-                            </div>
-                            <div>
-                                <label class="label">{{ __('Role') }}</label>
-                                <select class="field" name="role" required>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->name }}" @selected($user->hasRole($role->name))>{{ $role->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <label class="inline-flex items-center gap-2 text-sm">
-                            <input type="checkbox" name="is_active" value="1" @checked($user->is_active)> {{ __('Active') }}
-                        </label>
-                        <div class="flex justify-end gap-2 pt-2">
+                            <label class="mt-4 inline-flex items-center gap-2 text-sm text-parchment/80">
+                                <input type="checkbox" name="is_active" value="1" @checked($user->is_active)> {{ __('Active') }}
+                            </label>
+                        </section>
+                        <div class="dialog-actions">
                             <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'edit-user-{{ $user->id }}')">{{ __('Cancel') }}</button>
                             <button class="btn-primary">{{ __('Save') }}</button>
                         </div>

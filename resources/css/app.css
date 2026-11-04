@@ -141,4 +141,58 @@
     .progress-ring {
         transform: rotate(-90deg);
     }
+
+    /* Fana-style modal shell (Maraki espresso + amber) */
+    .dialog-panel {
+        @apply rounded-2xl border border-amber/40 bg-[#1C120C] text-parchment shadow-modal;
+    }
+
+    .dialog-section {
+        @apply rounded-xl border border-amber/25 bg-[#241C19] p-4;
+    }
+
+    .dialog-section-title {
+        @apply mb-3 text-xs font-extrabold uppercase tracking-[0.14em] text-amber;
+    }
+
+    .dialog-body {
+        @apply text-parchment;
+    }
+
+    .dialog-body p {
+        @apply text-parchment/65;
+    }
+
+    .dialog-body .label {
+        @apply text-amber-soft;
+    }
+
+    .dialog-body .field {
+        @apply border-amber/20 bg-[#16100E] text-parchment placeholder:text-parchment/35 focus:border-amber focus:ring-amber/40;
+    }
+
+    .dialog-body .btn-secondary {
+        @apply border-amber/25 bg-transparent text-parchment hover:bg-white/5;
+    }
+
+    .dialog-body .btn-ghost {
+        @apply text-amber-soft hover:bg-white/5;
+    }
+
+    .dialog-body .pill-option {
+        @apply border-amber/25 bg-[#16100E] text-parchment;
+    }
+
+    .dialog-body .pill-option-active {
+        @apply border-amber bg-amber text-obsidian;
+    }
+
+    .dialog-body .border-bean\/10,
+    .dialog-body .dark\:border-white\/10 {
+        @apply border-amber/20;
+    }
+
+    .dialog-actions {
+        @apply flex flex-wrap justify-end gap-2 border-t border-amber/20 pt-4;
+    }
 }

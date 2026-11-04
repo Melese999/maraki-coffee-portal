@@ -273,5 +273,10 @@
     "selected": "ተመርጠዋል",
     "Choose all items or a custom selection for the guest menu.": "ለእንግዳ ሜኑ ሁሉንም ወይም የተመረጡ ዝርዝሮችን ይምረጡ።",
     "Choose all items or a custom selection for the PDF menu.": "ለ PDF ሜኑ ሁሉንም ወይም የተመረጡ ዝርዝሮችን ይምረጡ።",
-    "No menu items selected.": "ምንም ዝርዝር አልተመረጠም።"
+    "No menu items selected.": "ምንም ዝርዝር አልተመረጠም።",
+    "Sale details": "የሽያጭ ዝርዝር",
+    "Amount & date": "መጠን እና ቀን",
+    "Item details": "የዝርዝር መረጃ",
+    "Select items": "ዝርዝሮችን ምረጥ",
+    "Identity & contact": "መታወቂያ እና ግንኙነት"
 }

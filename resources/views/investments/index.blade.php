@@ -81,19 +81,22 @@
                 <form method="POST" action="{{ route('investors.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="_form" value="investor">
-                    <div>
-                        <label class="label">{{ __('Name') }}</label>
-                        <input class="field" name="name" value="{{ old('name') }}" required>
-                    </div>
-                    <div>
-                        <label class="label">{{ __('Phone') }}</label>
-                        <input class="field" name="phone" value="{{ old('phone') }}">
-                    </div>
-                    <div>
-                        <label class="label">{{ __('Notes') }}</label>
-                        <input class="field" name="notes" value="{{ old('notes') }}">
-                    </div>
-                    <div class="flex justify-end gap-2 pt-2">
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Identity & contact') }}</h3>
+                        <div>
+                            <label class="label">{{ __('Name') }}</label>
+                            <input class="field" name="name" value="{{ old('name') }}" required>
+                        </div>
+                        <div class="mt-4">
+                            <label class="label">{{ __('Phone') }}</label>
+                            <input class="field" name="phone" value="{{ old('phone') }}">
+                        </div>
+                        <div class="mt-4">
+                            <label class="label">{{ __('Notes') }}</label>
+                            <input class="field" name="notes" value="{{ old('notes') }}">
+                        </div>
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-investor')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Save person') }}</button>
                     </div>
@@ -104,41 +107,44 @@
                 <form method="POST" action="{{ route('investments.store') }}" class="space-y-4" x-data="{ type: '{{ old('type', 'loan') }}' }">
                     @csrf
                     <input type="hidden" name="_form" value="investment">
-                    <div>
-                        <label class="label">{{ __('From who') }}</label>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('From who') }}</h3>
                         <select class="field" name="investor_id" required>
                             <option value="">{{ __('Select person') }}</option>
                             @foreach ($investors as $investor)
                                 <option value="{{ $investor->id }}" @selected(old('investor_id') == $investor->id)>{{ $investor->name }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div>
-                        <label class="label">{{ __('Type') }}</label>
-                        <div class="flex flex-wrap gap-2">
-                            <label class="pill-option" :class="type === 'loan' && 'pill-option-active'">
-                                <input type="radio" class="sr-only" name="type" value="loan" x-model="type"> {{ __('Loan') }}
-                            </label>
-                            <label class="pill-option" :class="type === 'equity' && 'pill-option-active'">
-                                <input type="radio" class="sr-only" name="type" value="equity" x-model="type"> {{ __('Equity') }}
-                            </label>
+                        <div class="mt-4">
+                            <label class="label">{{ __('Type') }}</label>
+                            <div class="flex flex-wrap gap-2">
+                                <label class="pill-option" :class="type === 'loan' && 'pill-option-active'">
+                                    <input type="radio" class="sr-only" name="type" value="loan" x-model="type"> {{ __('Loan') }}
+                                </label>
+                                <label class="pill-option" :class="type === 'equity' && 'pill-option-active'">
+                                    <input type="radio" class="sr-only" name="type" value="equity" x-model="type"> {{ __('Equity') }}
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="label">{{ __('Amount') }}</label>
-                            <input class="field" type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required>
+                    </section>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Amount & date') }}</h3>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="label">{{ __('Amount') }}</label>
+                                <input class="field" type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required>
+                            </div>
+                            <div>
+                                <label class="label">{{ __('Date') }}</label>
+                                <input class="field" type="date" name="invested_on" value="{{ old('invested_on', now()->toDateString()) }}" required>
+                            </div>
                         </div>
-                        <div>
-                            <label class="label">{{ __('Date') }}</label>
-                            <input class="field" type="date" name="invested_on" value="{{ old('invested_on', now()->toDateString()) }}" required>
+                        <div class="mt-4">
+                            <label class="label">{{ __('Notes') }}</label>
+                            <input class="field" name="notes" value="{{ old('notes') }}">
                         </div>
-                    </div>
-                    <div>
-                        <label class="label">{{ __('Notes') }}</label>
-                        <input class="field" name="notes" value="{{ old('notes') }}">
-                    </div>
-                    <div class="flex justify-end gap-2 pt-2">
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-investment')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Save') }}</button>
                     </div>

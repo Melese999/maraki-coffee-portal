@@ -9,9 +9,9 @@
 <form
     method="POST"
     action="{{ route('sales.store') }}"
-    class="space-y-5"
+    class="space-y-4"
     x-data="{
-        status: '{{ old('payment_status', 'paid') }}',
+        status: @js(old('payment_status', 'paid')),
         rows: [{ menu_item_id: '', quantity: 1 }]
     }"
 >
@@ -20,39 +20,42 @@
     <input type="hidden" name="filter_from" value="{{ old('filter_from', $filterFrom ?? $date) }}">
     <input type="hidden" name="filter_to" value="{{ old('filter_to', $filterTo ?? $date) }}">
 
-    <div class="grid gap-4 sm:grid-cols-2">
-        <div>
-            <label class="label" for="sale_date">{{ __('Date') }}</label>
-            <input class="field" type="date" name="sale_date" id="sale_date" value="{{ old('sale_date', $date ?? now()->toDateString()) }}" required>
-        </div>
-        <div>
-            <label class="label">{{ __('Payment') }}</label>
-            <div class="flex flex-wrap gap-2">
-                <label class="pill-option" :class="status === 'paid' && 'pill-option-active'">
-                    <input type="radio" class="sr-only" name="payment_status" value="paid" x-model="status">
-                    {{ __('Paid') }}
-                </label>
-                <label class="pill-option" :class="status === 'credit' && 'pill-option-active'">
-                    <input type="radio" class="sr-only" name="payment_status" value="credit" x-model="status">
-                    {{ __('Credit') }}
-                </label>
+    <section class="dialog-section">
+        <h3 class="dialog-section-title">{{ __('Sale details') }}</h3>
+        <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+                <label class="label" for="sale_date">{{ __('Date') }}</label>
+                <input class="field" type="date" name="sale_date" id="sale_date" value="{{ old('sale_date', $date ?? now()->toDateString()) }}" required>
+            </div>
+            <div>
+                <label class="label">{{ __('Payment') }}</label>
+                <div class="flex flex-wrap gap-2">
+                    <label class="pill-option" :class="status === 'paid' && 'pill-option-active'">
+                        <input type="radio" class="sr-only" name="payment_status" value="paid" x-model="status">
+                        {{ __('Paid') }}
+                    </label>
+                    <label class="pill-option" :class="status === 'credit' && 'pill-option-active'">
+                        <input type="radio" class="sr-only" name="payment_status" value="credit" x-model="status">
+                        {{ __('Credit') }}
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div x-show="status === 'credit'" x-cloak>
-        <label class="label" for="customer_id">{{ __('Customer') }}</label>
-        <select class="field" name="customer_id" id="customer_id">
-            <option value="">{{ __('Select customer') }}</option>
-            @foreach ($customers as $customer)
-                <option value="{{ $customer->id }}" @selected(old('customer_id') == $customer->id)>{{ $customer->name }}@if($customer->phone) · {{ $customer->phone }}@endif</option>
-            @endforeach
-        </select>
-    </div>
+        <div class="mt-4" x-show="status === 'credit'" x-cloak>
+            <label class="label" for="customer_id">{{ __('Customer') }}</label>
+            <select class="field" name="customer_id" id="customer_id">
+                <option value="">{{ __('Select customer') }}</option>
+                @foreach ($customers as $customer)
+                    <option value="{{ $customer->id }}" @selected(old('customer_id') == $customer->id)>{{ $customer->name }}@if($customer->phone) · {{ $customer->phone }}@endif</option>
+                @endforeach
+            </select>
+        </div>
+    </section>
 
-    <div>
-        <div class="mb-2 flex items-center justify-between gap-2">
-            <label class="label mb-0">{{ __('Menu items') }}</label>
+    <section class="dialog-section">
+        <div class="mb-3 flex items-center justify-between gap-2">
+            <h3 class="dialog-section-title mb-0">{{ __('Menu items') }}</h3>
             <button type="button" class="btn-ghost text-xs" @click="rows.push({ menu_item_id: '', quantity: 1 })">+ {{ __('Add line') }}</button>
         </div>
         <div class="space-y-3">
@@ -69,14 +72,14 @@
                 </div>
             </template>
         </div>
-    </div>
+    </section>
 
-    <div>
-        <label class="label" for="notes">{{ __('Notes') }}</label>
+    <section class="dialog-section">
+        <h3 class="dialog-section-title">{{ __('Notes') }}</h3>
         <input class="field" type="text" name="notes" id="notes" value="{{ old('notes') }}" placeholder="{{ __('Optional note') }}">
-    </div>
+    </section>
 
-    <div class="flex flex-wrap justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+    <div class="dialog-actions">
         <button type="button" class="btn-secondary" x-on:click="$dispatch('close-modal', 'create-sale')">{{ __('Cancel') }}</button>
         <button class="btn-primary">{{ __('Save sale') }}</button>
     </div>
