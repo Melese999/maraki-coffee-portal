@@ -19,15 +19,34 @@
     </script>
 </head>
 <body class="m-0 h-full overflow-hidden p-0 font-sans">
-    {{-- Fixed desktop sidebar: flush to viewport edges, never scrolls with body --}}
-    <aside class="fixed inset-y-0 left-0 z-40 m-0 hidden w-64 flex-col border-r border-bean/10 bg-espresso p-0 text-parchment dark:border-white/5 dark:bg-obsidian md:flex">
+    {{-- Mobile drawer backdrop --}}
+    <div
+        class="fixed inset-0 z-40 bg-espresso/50 backdrop-blur-sm transition md:hidden"
+        x-show="$store.sidebar.open"
+        x-cloak
+        x-transition.opacity
+        x-on:click="$store.sidebar.close()"
+    ></div>
+
+    {{-- Sidebar: off-canvas on mobile, fixed on desktop --}}
+    <aside
+        class="fixed inset-y-0 left-0 z-50 m-0 flex w-64 max-w-[85vw] flex-col border-r border-bean/10 bg-espresso p-0 text-parchment transition-transform duration-300 dark:border-white/5 dark:bg-obsidian md:translate-x-0"
+        :class="$store.sidebar.open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+        x-on:keydown.escape.window="$store.sidebar.close()"
+    >
         <div class="tibeb-bar shrink-0"></div>
 
-        <div class="shrink-0 border-b border-white/10 p-5">
+        <div class="flex shrink-0 items-start justify-between gap-2 border-b border-white/10 p-5">
             <x-brand-logo class="[&_.font-display]:text-parchment [&_.text-bean]:text-amber/80" />
+            <button
+                type="button"
+                class="btn-icon mt-0.5 text-parchment/70 md:hidden"
+                x-on:click="$store.sidebar.close()"
+                aria-label="{{ __('Close') }}"
+            >✕</button>
         </div>
 
-        <nav class="min-h-0 flex-1 space-y-1 overflow-y-auto p-3">
+        <nav class="min-h-0 flex-1 space-y-1 overflow-y-auto p-3" x-on:click="$store.sidebar.close()">
             @include('layouts.partials.nav-links', ['variant' => 'sidebar'])
         </nav>
 
@@ -65,9 +84,14 @@
 
         <header class="sticky top-0 z-20 shrink-0 border-b border-bean/10 bg-parchment/95 backdrop-blur dark:border-white/5 dark:bg-obsidian/95">
             <div class="flex w-full items-center justify-between gap-3 px-3 py-3 sm:px-4 lg:px-5">
-                <div class="md:hidden">
+                <button
+                    type="button"
+                    class="rounded-xl text-left transition hover:opacity-90 md:hidden"
+                    x-on:click="$store.sidebar.toggle()"
+                    aria-label="{{ __('Open menu') }}"
+                >
                     <x-brand-logo />
-                </div>
+                </button>
                 <div class="hidden md:block">
                     @isset($header)
                         <h1 class="font-display text-2xl text-espresso dark:text-parchment">{!! $header !!}</h1>

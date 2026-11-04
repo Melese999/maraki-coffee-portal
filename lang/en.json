@@ -261,5 +261,17 @@
     "total": "total",
     "vs": "vs",
     "vs previous period": "vs previous period",
-    "Install app": "Install app"
+    "Install app": "Install app",
+    "Open menu": "Open menu",
+    "Print menu": "Print menu",
+    "PDF menu": "PDF menu",
+    "Print selected": "Print selected",
+    "Download PDF": "Download PDF",
+    "Select all": "Select all",
+    "Clear all": "Clear all",
+    "Active only": "Active only",
+    "selected": "selected",
+    "Choose all items or a custom selection for the guest menu.": "Choose all items or a custom selection for the guest menu.",
+    "Choose all items or a custom selection for the PDF menu.": "Choose all items or a custom selection for the PDF menu.",
+    "No menu items selected.": "No menu items selected."
 }

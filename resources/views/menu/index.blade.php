@@ -1,14 +1,98 @@
+@php
+    $defaultSelected = $printItems->where('is_active', true)->pluck('id')->map(fn ($id) => (string) $id)->values()->all();
+    $allIds = $printItems->pluck('id')->map(fn ($id) => (string) $id)->values()->all();
+@endphp
+
 <x-app-layout>
     <x-slot name="header">{{ __('Menu items') }}</x-slot>
 
     <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
         <p class="text-sm text-bean dark:text-parchment/60">{{ __('Active items available to sell at Maraki.') }}</p>
-        @can('menu.create')
-            <button type="button" class="btn-primary" x-data x-on:click="$dispatch('open-modal', 'create-menu')">
-                {{ __('Add menu item') }}
-            </button>
-        @endcan
+        <div class="flex flex-wrap items-center gap-2">
+                <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('open-modal', 'print-menu')">
+                    {{ __('PDF menu') }}
+                </button>
+            @can('menu.create')
+                <button type="button" class="btn-primary" x-data x-on:click="$dispatch('open-modal', 'create-menu')">
+                    {{ __('Add menu item') }}
+                </button>
+            @endcan
+        </div>
     </div>
+
+    <x-ui.dialog
+        name="print-menu"
+        :title="__('PDF menu')"
+        :subtitle="__('Choose all items or a custom selection for the PDF menu.')"
+        maxWidth="xl"
+    >
+        <div
+            class="space-y-4"
+            x-data="{
+                selected: @js($defaultSelected),
+                allIds: @js($allIds),
+                activeIds: @js($defaultSelected),
+                get allSelected() {
+                    return this.allIds.length > 0 && this.selected.length === this.allIds.length;
+                },
+                toggleAll() {
+                    this.selected = this.allSelected ? [] : [...this.allIds];
+                },
+                selectActive() {
+                    this.selected = [...this.activeIds];
+                },
+                printSelected() {
+                    if (this.selected.length === 0) {
+                        return;
+                    }
+                    const params = new URLSearchParams();
+                    this.selected.forEach((id) => params.append('ids[]', id));
+                    window.location.href = @js(route('menu-items.print')) + '?' + params.toString();
+                }
+            }"
+        >
+            <div class="flex flex-wrap gap-2">
+                <button type="button" class="btn-secondary py-2 text-xs" x-on:click="toggleAll()">
+                    <span x-show="!allSelected">{{ __('Select all') }}</span>
+                    <span x-show="allSelected" x-cloak>{{ __('Clear all') }}</span>
+                </button>
+                <button type="button" class="btn-secondary py-2 text-xs" x-on:click="selectActive()">
+                    {{ __('Active only') }}
+                </button>
+                <span class="self-center text-xs text-bean dark:text-parchment/55" x-text="selected.length + ' {{ __('selected') }}'"></span>
+            </div>
+
+            <div class="max-h-72 space-y-1 overflow-y-auto rounded-2xl border border-bean/10 p-2 dark:border-white/10">
+                @forelse ($printItems as $item)
+                    <label class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-parchment-muted dark:hover:bg-obsidian-soft">
+                        <input
+                            type="checkbox"
+                            class="rounded border-bean/30 text-terracotta focus:ring-terracotta"
+                            value="{{ $item->id }}"
+                            x-model="selected"
+                        >
+                        <span class="min-w-0 flex-1">
+                            <span class="block truncate text-sm font-medium">{{ $item->name }}</span>
+                            <span class="text-xs text-bean dark:text-parchment/50">{{ $item->unit }} · {{ $item->is_active ? __('Active') : __('Hidden') }}</span>
+                        </span>
+                        <span class="shrink-0 text-sm font-semibold text-terracotta dark:text-amber">{{ \App\Support\Money::format($item->price) }}</span>
+                    </label>
+                @empty
+                    <p class="p-3 text-sm text-bean dark:text-parchment/55">{{ __('No menu items selected.') }}</p>
+                @endforelse
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+                <button type="button" class="btn-secondary" x-on:click="$dispatch('close-modal', 'print-menu')">{{ __('Cancel') }}</button>
+                <button
+                    type="button"
+                    class="btn-primary"
+                    x-bind:disabled="selected.length === 0"
+                    x-on:click="printSelected(); $dispatch('close-modal', 'print-menu')"
+                    >{{ __('Download PDF') }}</button>
+            </div>
+        </div>
+    </x-ui.dialog>
 
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         @foreach ($items as $item)

@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->middleware('permission:expenses.delete')->name('expenses.destroy');
 
     Route::get('/menu', [MenuItemController::class, 'index'])->middleware('permission:menu.view')->name('menu-items.index');
+    Route::get('/menu/print', [MenuItemController::class, 'print'])->middleware('permission:menu.view')->name('menu-items.print');
     Route::post('/menu', [MenuItemController::class, 'store'])->middleware('permission:menu.create')->name('menu-items.store');
     Route::put('/menu/{menuItem}', [MenuItemController::class, 'update'])->middleware('permission:menu.update')->name('menu-items.update');
     Route::delete('/menu/{menuItem}', [MenuItemController::class, 'destroy'])->middleware('permission:menu.delete')->name('menu-items.destroy');

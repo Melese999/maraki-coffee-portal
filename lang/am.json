@@ -261,5 +261,17 @@
     "total": "ድምር",
     "vs": "ከ",
     "vs previous period": "ከቀድሞው ጊዜ ጋር",
-    "Install app": "መተግበሪያ ጫን"
+    "Install app": "መተግበሪያ ጫን",
+    "Open menu": "ሜኑ ክፈት",
+    "Print menu": "ሜኑ አትም",
+    "PDF menu": "PDF ሜኑ",
+    "Print selected": "የተመረጡትን አትም",
+    "Download PDF": "PDF አውርድ",
+    "Select all": "ሁሉን ምረጥ",
+    "Clear all": "ሁሉን አጽዳ",
+    "Active only": "ንቁ ብቻ",
+    "selected": "ተመርጠዋል",
+    "Choose all items or a custom selection for the guest menu.": "ለእንግዳ ሜኑ ሁሉንም ወይም የተመረጡ ዝርዝሮችን ይምረጡ።",
+    "Choose all items or a custom selection for the PDF menu.": "ለ PDF ሜኑ ሁሉንም ወይም የተመረጡ ዝርዝሮችን ይምረጡ።",
+    "No menu items selected.": "ምንም ዝርዝር አልተመረጠም።"
 }
