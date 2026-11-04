@@ -19,64 +19,20 @@
     </script>
 </head>
 <body class="m-0 h-full overflow-hidden p-0 font-sans">
+    {{-- Desktop sidebar --}}
+    @include('layouts.partials.sidebar', ['mobile' => false])
+
     {{-- Mobile drawer backdrop --}}
     <div
-        class="fixed inset-0 z-40 bg-espresso/50 backdrop-blur-sm transition md:hidden"
+        class="fixed inset-0 z-40 bg-espresso/50 backdrop-blur-sm md:hidden"
         x-show="$store.sidebar.open"
         x-cloak
         x-transition.opacity
         x-on:click="$store.sidebar.close()"
     ></div>
 
-    {{-- Sidebar: off-canvas on mobile (closed by default), fixed on desktop --}}
-    <aside
-        class="fixed inset-y-0 left-0 z-50 m-0 flex w-64 max-w-[85vw] -translate-x-full flex-col border-r border-bean/10 bg-espresso p-0 text-parchment transition-transform duration-300 dark:border-white/5 dark:bg-obsidian md:translate-x-0"
-        :class="{ '!translate-x-0': $store.sidebar.open }"
-        x-on:keydown.escape.window="$store.sidebar.close()"
-    >
-        <div class="tibeb-bar shrink-0"></div>
-
-        <div class="flex shrink-0 items-start justify-between gap-2 border-b border-white/10 p-5">
-            <x-brand-logo class="[&_.font-display]:text-parchment [&_.text-bean]:text-amber/80" />
-            <button
-                type="button"
-                class="btn-icon mt-0.5 text-parchment/70 md:hidden"
-                x-on:click="$store.sidebar.close()"
-                aria-label="{{ __('Close') }}"
-            >✕</button>
-        </div>
-
-        <nav class="min-h-0 flex-1 space-y-1 overflow-y-auto p-3" x-on:click="$store.sidebar.close()">
-            @include('layouts.partials.nav-links', ['variant' => 'sidebar'])
-        </nav>
-
-        <div class="shrink-0 border-t border-white/10 p-4 text-sm text-parchment/70">
-            <div class="mb-3 flex gap-1 rounded-xl bg-white/5 p-1">
-                <a
-                    href="{{ route('locale.switch', 'en') }}"
-                    @class([
-                        'flex-1 rounded-lg px-2 py-1.5 text-center text-xs font-semibold transition',
-                        'bg-amber text-obsidian' => app()->getLocale() === 'en',
-                        'text-parchment/70 hover:bg-white/10' => app()->getLocale() !== 'en',
-                    ])
-                >EN</a>
-                <a
-                    href="{{ route('locale.switch', 'am') }}"
-                    @class([
-                        'flex-1 rounded-lg px-2 py-1.5 text-center text-xs font-semibold transition',
-                        'bg-amber text-obsidian' => app()->getLocale() === 'am',
-                        'text-parchment/70 hover:bg-white/10' => app()->getLocale() !== 'am',
-                    ])
-                >አማ</a>
-            </div>
-            <div class="font-medium text-parchment">{{ auth()->user()->name }}</div>
-            <div class="text-xs">{{ auth()->user()->getRoleNames()->join(', ') }}</div>
-            <form method="POST" action="{{ route('logout') }}" class="mt-3">
-                @csrf
-                <button class="text-amber hover:underline">{{ __('Log out') }}</button>
-            </form>
-        </div>
-    </aside>
+    {{-- Mobile drawer: hidden until logo tap --}}
+    @include('layouts.partials.sidebar', ['mobile' => true])
 
     {{-- Main column sits flush against the sidebar (no body gap) --}}
     <div class="m-0 flex h-full min-h-0 flex-col overflow-y-auto bg-parchment p-0 pb-24 dark:bg-obsidian md:ml-64 md:pb-0">
