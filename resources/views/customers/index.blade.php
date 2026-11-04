@@ -42,19 +42,22 @@
                 <form method="POST" action="{{ route('customers.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="_form" value="customer-create">
-                    <div>
-                        <label class="label">{{ __('Name') }}</label>
-                        <input class="field" name="name" value="{{ old('name') }}" required>
-                    </div>
-                    <div>
-                        <label class="label">{{ __('Phone') }}</label>
-                        <input class="field" name="phone" value="{{ old('phone') }}">
-                    </div>
-                    <div>
-                        <label class="label">{{ __('Notes') }}</label>
-                        <input class="field" name="notes" value="{{ old('notes') }}">
-                    </div>
-                    <div class="flex justify-end gap-2 pt-2">
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Identity & contact') }}</h3>
+                        <div>
+                            <label class="label">{{ __('Name') }}</label>
+                            <input class="field" name="name" value="{{ old('name') }}" required>
+                        </div>
+                        <div class="mt-4">
+                            <label class="label">{{ __('Phone') }}</label>
+                            <input class="field" name="phone" value="{{ old('phone') }}">
+                        </div>
+                        <div class="mt-4">
+                            <label class="label">{{ __('Notes') }}</label>
+                            <input class="field" name="notes" value="{{ old('notes') }}">
+                        </div>
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-customer')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Save') }}</button>
                     </div>
@@ -68,19 +71,22 @@
                     <form method="POST" action="{{ route('customers.update', $customer) }}" class="space-y-4">
                         @csrf
                         @method('PUT')
-                        <div>
-                            <label class="label">{{ __('Name') }}</label>
-                            <input class="field" name="name" value="{{ $customer->name }}" required>
-                        </div>
-                        <div>
-                            <label class="label">{{ __('Phone') }}</label>
-                            <input class="field" name="phone" value="{{ $customer->phone }}">
-                        </div>
-                        <div>
-                            <label class="label">{{ __('Notes') }}</label>
-                            <textarea class="field" name="notes" rows="2">{{ $customer->notes }}</textarea>
-                        </div>
-                        <div class="flex justify-end gap-2 pt-2">
+                        <section class="dialog-section">
+                            <h3 class="dialog-section-title">{{ __('Identity & contact') }}</h3>
+                            <div>
+                                <label class="label">{{ __('Name') }}</label>
+                                <input class="field" name="name" value="{{ $customer->name }}" required>
+                            </div>
+                            <div class="mt-4">
+                                <label class="label">{{ __('Phone') }}</label>
+                                <input class="field" name="phone" value="{{ $customer->phone }}">
+                            </div>
+                            <div class="mt-4">
+                                <label class="label">{{ __('Notes') }}</label>
+                                <textarea class="field" name="notes" rows="2">{{ $customer->notes }}</textarea>
+                            </div>
+                        </section>
+                        <div class="dialog-actions">
                             <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'edit-customer-{{ $customer->id }}')">{{ __('Cancel') }}</button>
                             <button class="btn-primary">{{ __('Update') }}</button>
                         </div>

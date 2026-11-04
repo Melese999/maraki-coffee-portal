@@ -69,21 +69,24 @@
                     <form method="POST" action="{{ route('loan-payments.store', $investment) }}" class="space-y-4">
                         @csrf
                         <input type="hidden" name="_form" value="loan-payment">
-                        <div class="grid gap-4 sm:grid-cols-2">
-                            <div>
-                                <label class="label">{{ __('Date') }}</label>
-                                <input class="field" type="date" name="payment_date" value="{{ old('payment_date', now()->toDateString()) }}" required>
+                        <section class="dialog-section">
+                            <h3 class="dialog-section-title">{{ __('Payment') }}</h3>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label class="label">{{ __('Date') }}</label>
+                                    <input class="field" type="date" name="payment_date" value="{{ old('payment_date', now()->toDateString()) }}" required>
+                                </div>
+                                <div>
+                                    <label class="label">{{ __('Amount') }}</label>
+                                    <input class="field" type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required>
+                                </div>
                             </div>
-                            <div>
-                                <label class="label">{{ __('Amount') }}</label>
-                                <input class="field" type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required>
+                            <div class="mt-4">
+                                <label class="label">{{ __('Note') }}</label>
+                                <input class="field" name="note" value="{{ old('note') }}">
                             </div>
-                        </div>
-                        <div>
-                            <label class="label">{{ __('Note') }}</label>
-                            <input class="field" name="note" value="{{ old('note') }}">
-                        </div>
-                        <div class="flex justify-end gap-2 pt-2">
+                        </section>
+                        <div class="dialog-actions">
                             <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'loan-payment')">{{ __('Cancel') }}</button>
                             <button class="btn-primary">{{ __('Save payment') }}</button>
                         </div>

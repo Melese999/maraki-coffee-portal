@@ -273,5 +273,10 @@
     "selected": "selected",
     "Choose all items or a custom selection for the guest menu.": "Choose all items or a custom selection for the guest menu.",
     "Choose all items or a custom selection for the PDF menu.": "Choose all items or a custom selection for the PDF menu.",
-    "No menu items selected.": "No menu items selected."
+    "No menu items selected.": "No menu items selected.",
+    "Sale details": "Sale details",
+    "Amount & date": "Amount & date",
+    "Item details": "Item details",
+    "Select items": "Select items",
+    "Identity & contact": "Identity & contact"
 }

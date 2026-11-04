@@ -51,38 +51,41 @@
                 }
             }"
         >
-            <div class="flex flex-wrap gap-2">
-                <button type="button" class="btn-secondary py-2 text-xs" x-on:click="toggleAll()">
-                    <span x-show="!allSelected">{{ __('Select all') }}</span>
-                    <span x-show="allSelected" x-cloak>{{ __('Clear all') }}</span>
-                </button>
-                <button type="button" class="btn-secondary py-2 text-xs" x-on:click="selectActive()">
-                    {{ __('Active only') }}
-                </button>
-                <span class="self-center text-xs text-bean dark:text-parchment/55" x-text="selected.length + ' {{ __('selected') }}'"></span>
-            </div>
+            <section class="dialog-section">
+                <h3 class="dialog-section-title">{{ __('Select items') }}</h3>
+                <div class="mb-3 flex flex-wrap gap-2">
+                    <button type="button" class="btn-secondary py-2 text-xs" x-on:click="toggleAll()">
+                        <span x-show="!allSelected">{{ __('Select all') }}</span>
+                        <span x-show="allSelected" x-cloak>{{ __('Clear all') }}</span>
+                    </button>
+                    <button type="button" class="btn-secondary py-2 text-xs" x-on:click="selectActive()">
+                        {{ __('Active only') }}
+                    </button>
+                    <span class="self-center text-xs text-parchment/55" x-text="selected.length + ' {{ __('selected') }}'"></span>
+                </div>
 
-            <div class="max-h-72 space-y-1 overflow-y-auto rounded-2xl border border-bean/10 p-2 dark:border-white/10">
-                @forelse ($printItems as $item)
-                    <label class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-parchment-muted dark:hover:bg-obsidian-soft">
-                        <input
-                            type="checkbox"
-                            class="rounded border-bean/30 text-terracotta focus:ring-terracotta"
-                            value="{{ $item->id }}"
-                            x-model="selected"
-                        >
-                        <span class="min-w-0 flex-1">
-                            <span class="block truncate text-sm font-medium">{{ $item->name }}</span>
-                            <span class="text-xs text-bean dark:text-parchment/50">{{ $item->unit }} · {{ $item->is_active ? __('Active') : __('Hidden') }}</span>
-                        </span>
-                        <span class="shrink-0 text-sm font-semibold text-terracotta dark:text-amber">{{ \App\Support\Money::format($item->price) }}</span>
-                    </label>
-                @empty
-                    <p class="p-3 text-sm text-bean dark:text-parchment/55">{{ __('No menu items selected.') }}</p>
-                @endforelse
-            </div>
+                <div class="max-h-72 space-y-1 overflow-y-auto rounded-xl border border-amber/20 bg-[#16100E] p-2">
+                    @forelse ($printItems as $item)
+                        <label class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-white/5">
+                            <input
+                                type="checkbox"
+                                class="rounded border-amber/30 text-amber focus:ring-amber"
+                                value="{{ $item->id }}"
+                                x-model="selected"
+                            >
+                            <span class="min-w-0 flex-1">
+                                <span class="block truncate text-sm font-medium text-parchment">{{ $item->name }}</span>
+                                <span class="text-xs text-parchment/50">{{ $item->unit }} · {{ $item->is_active ? __('Active') : __('Hidden') }}</span>
+                            </span>
+                            <span class="shrink-0 text-sm font-semibold text-amber">{{ \App\Support\Money::format($item->price) }}</span>
+                        </label>
+                    @empty
+                        <p class="p-3 text-sm">{{ __('No menu items selected.') }}</p>
+                    @endforelse
+                </div>
+            </section>
 
-            <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+            <div class="dialog-actions">
                 <button type="button" class="btn-secondary" x-on:click="$dispatch('close-modal', 'print-menu')">{{ __('Cancel') }}</button>
                 <button
                     type="button"
@@ -146,29 +149,32 @@
                 <form method="POST" action="{{ route('menu-items.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="_form" value="menu-create">
-                    <div>
-                        <label class="label" for="name">{{ __('Name') }}</label>
-                        <input class="field" name="name" id="name" value="{{ old('name') }}" required>
-                    </div>
-                    <div class="grid gap-4 sm:grid-cols-3">
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Item details') }}</h3>
                         <div>
-                            <label class="label" for="price">{{ __('Price') }}</label>
-                            <input class="field" type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price') }}" required>
+                            <label class="label" for="name">{{ __('Name') }}</label>
+                            <input class="field" name="name" id="name" value="{{ old('name') }}" required>
                         </div>
-                        <div>
-                            <label class="label" for="unit">{{ __('Unit') }}</label>
-                            <input class="field" name="unit" id="unit" value="{{ old('unit', 'cup') }}" required>
+                        <div class="mt-4 grid gap-4 sm:grid-cols-3">
+                            <div>
+                                <label class="label" for="price">{{ __('Price') }}</label>
+                                <input class="field" type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price') }}" required>
+                            </div>
+                            <div>
+                                <label class="label" for="unit">{{ __('Unit') }}</label>
+                                <input class="field" name="unit" id="unit" value="{{ old('unit', 'cup') }}" required>
+                            </div>
+                            <div>
+                                <label class="label" for="sort_order">{{ __('Sort') }}</label>
+                                <input class="field" type="number" min="0" name="sort_order" id="sort_order" value="{{ old('sort_order', 0) }}">
+                            </div>
                         </div>
-                        <div>
-                            <label class="label" for="sort_order">{{ __('Sort') }}</label>
-                            <input class="field" type="number" min="0" name="sort_order" id="sort_order" value="{{ old('sort_order', 0) }}">
-                        </div>
-                    </div>
-                    <label class="inline-flex items-center gap-2 text-sm">
-                        <input type="checkbox" name="is_active" value="1" checked>
-                        {{ __('Available to sell') }}
-                    </label>
-                    <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+                        <label class="mt-4 inline-flex items-center gap-2 text-sm text-parchment/80">
+                            <input type="checkbox" name="is_active" value="1" checked>
+                            {{ __('Available to sell') }}
+                        </label>
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-menu')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Add item') }}</button>
                     </div>
@@ -188,29 +194,32 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="_form" value="menu-edit-{{ $item->id }}">
-                        <div>
-                            <label class="label">{{ __('Name') }}</label>
-                            <input class="field" name="name" value="{{ old('name', $item->name) }}" required>
-                        </div>
-                        <div class="grid gap-4 sm:grid-cols-3">
+                        <section class="dialog-section">
+                            <h3 class="dialog-section-title">{{ __('Item details') }}</h3>
                             <div>
-                                <label class="label">{{ __('Price') }}</label>
-                                <input class="field" type="number" step="0.01" name="price" value="{{ old('price', $item->price) }}" required>
+                                <label class="label">{{ __('Name') }}</label>
+                                <input class="field" name="name" value="{{ old('name', $item->name) }}" required>
                             </div>
-                            <div>
-                                <label class="label">{{ __('Unit') }}</label>
-                                <input class="field" name="unit" value="{{ old('unit', $item->unit) }}" required>
+                            <div class="mt-4 grid gap-4 sm:grid-cols-3">
+                                <div>
+                                    <label class="label">{{ __('Price') }}</label>
+                                    <input class="field" type="number" step="0.01" name="price" value="{{ old('price', $item->price) }}" required>
+                                </div>
+                                <div>
+                                    <label class="label">{{ __('Unit') }}</label>
+                                    <input class="field" name="unit" value="{{ old('unit', $item->unit) }}" required>
+                                </div>
+                                <div>
+                                    <label class="label">{{ __('Sort') }}</label>
+                                    <input class="field" type="number" name="sort_order" value="{{ old('sort_order', $item->sort_order) }}">
+                                </div>
                             </div>
-                            <div>
-                                <label class="label">{{ __('Sort') }}</label>
-                                <input class="field" type="number" name="sort_order" value="{{ old('sort_order', $item->sort_order) }}">
-                            </div>
-                        </div>
-                        <label class="inline-flex items-center gap-2 text-sm">
-                            <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $item->is_active))>
-                            {{ __('Active') }}
-                        </label>
-                        <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+                            <label class="mt-4 inline-flex items-center gap-2 text-sm text-parchment/80">
+                                <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $item->is_active))>
+                                {{ __('Active') }}
+                            </label>
+                        </section>
+                        <div class="dialog-actions">
                             <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'edit-menu-{{ $item->id }}')">{{ __('Cancel') }}</button>
                             <button class="btn-primary">{{ __('Save changes') }}</button>
                         </div>

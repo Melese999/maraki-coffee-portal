@@ -44,26 +44,29 @@
                 <form method="POST" action="{{ route('admin.roles.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="_form" value="role-create">
-                    <div>
-                        <label class="label">{{ __('Role name') }}</label>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Role name') }}</h3>
                         <input class="field max-w-sm" name="name" value="{{ old('name') }}" required>
-                    </div>
-                    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        @foreach ($permissions as $group => $items)
-                            <div class="rounded-2xl border border-bean/10 bg-parchment-soft/70 p-3 dark:border-white/5 dark:bg-obsidian-soft">
-                                <div class="mb-2 text-sm font-semibold capitalize">{{ $group }}</div>
-                                <div class="space-y-1">
-                                    @foreach ($items as $permission)
-                                        <label class="flex items-center gap-2 text-sm">
-                                            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}">
-                                            {{ $permission->name }}
-                                        </label>
-                                    @endforeach
+                    </section>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('permissions') }}</h3>
+                        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            @foreach ($permissions as $group => $items)
+                                <div class="rounded-xl border border-amber/20 bg-[#16100E] p-3">
+                                    <div class="mb-2 text-sm font-semibold capitalize text-amber">{{ $group }}</div>
+                                    <div class="space-y-1">
+                                        @foreach ($items as $permission)
+                                            <label class="flex items-center gap-2 text-sm text-parchment/80">
+                                                <input type="checkbox" name="permissions[]" value="{{ $permission->name }}">
+                                                {{ $permission->name }}
+                                            </label>
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="flex justify-end gap-2 pt-2">
+                            @endforeach
+                        </div>
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'create-role')">{{ __('Cancel') }}</button>
                         <button class="btn-primary">{{ __('Create role') }}</button>
                     </div>
@@ -77,29 +80,32 @@
                     <form method="POST" action="{{ route('admin.roles.update', $role) }}" class="space-y-4">
                         @csrf
                         @method('PUT')
-                        <div>
-                            <label class="label">{{ __('Role name') }}</label>
+                        <section class="dialog-section">
+                            <h3 class="dialog-section-title">{{ __('Role name') }}</h3>
                             <input class="field max-w-sm" name="name" value="{{ $role->name }}" @disabled($role->name === 'Admin') required>
                             @if ($role->name === 'Admin')
                                 <input type="hidden" name="name" value="Admin">
                             @endif
-                        </div>
-                        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                            @foreach ($permissions as $group => $items)
-                                <div class="rounded-2xl border border-bean/10 bg-parchment-soft/70 p-3 dark:border-white/5 dark:bg-obsidian-soft">
-                                    <div class="mb-2 text-sm font-semibold capitalize">{{ $group }}</div>
-                                    <div class="space-y-1">
-                                        @foreach ($items as $permission)
-                                            <label class="flex items-center gap-2 text-sm">
-                                                <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" @checked($role->hasPermissionTo($permission->name))>
-                                                {{ $permission->name }}
-                                            </label>
-                                        @endforeach
+                        </section>
+                        <section class="dialog-section">
+                            <h3 class="dialog-section-title">{{ __('permissions') }}</h3>
+                            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                                @foreach ($permissions as $group => $items)
+                                    <div class="rounded-xl border border-amber/20 bg-[#16100E] p-3">
+                                        <div class="mb-2 text-sm font-semibold capitalize text-amber">{{ $group }}</div>
+                                        <div class="space-y-1">
+                                            @foreach ($items as $permission)
+                                                <label class="flex items-center gap-2 text-sm text-parchment/80">
+                                                    <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" @checked($role->hasPermissionTo($permission->name))>
+                                                    {{ $permission->name }}
+                                                </label>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="flex justify-end gap-2 pt-2">
+                                @endforeach
+                            </div>
+                        </section>
+                        <div class="dialog-actions">
                             <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'edit-role-{{ $role->id }}')">{{ __('Cancel') }}</button>
                             <button class="btn-primary">{{ __('Save permissions') }}</button>
                         </div>

@@ -104,8 +104,8 @@
                 <form method="POST" action="{{ route('credit.payments.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="_form" value="credit">
-                    <div>
-                        <label class="label" for="sale_id">{{ __('Unpaid sale') }}</label>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Unpaid sale') }}</h3>
                         <select class="field" name="sale_id" id="sale_id" required>
                             @foreach ($openSales as $sale)
                                 <option value="{{ $sale->id }}" @selected(old('sale_id') == $sale->id)>
@@ -113,22 +113,25 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="label" for="payment_date">{{ __('Date') }}</label>
-                            <input class="field" type="date" name="payment_date" id="payment_date" value="{{ old('payment_date', now()->toDateString()) }}" required>
+                    </section>
+                    <section class="dialog-section">
+                        <h3 class="dialog-section-title">{{ __('Payment') }}</h3>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="label" for="payment_date">{{ __('Date') }}</label>
+                                <input class="field" type="date" name="payment_date" id="payment_date" value="{{ old('payment_date', now()->toDateString()) }}" required>
+                            </div>
+                            <div>
+                                <label class="label" for="amount">{{ __('Amount') }}</label>
+                                <input class="field" type="number" step="0.01" min="0.01" name="amount" id="amount" value="{{ old('amount') }}" required>
+                            </div>
                         </div>
-                        <div>
-                            <label class="label" for="amount">{{ __('Amount') }}</label>
-                            <input class="field" type="number" step="0.01" min="0.01" name="amount" id="amount" value="{{ old('amount') }}" required>
+                        <div class="mt-4">
+                            <label class="label" for="note">{{ __('Note') }}</label>
+                            <input class="field" type="text" name="note" id="note" value="{{ old('note') }}">
                         </div>
-                    </div>
-                    <div>
-                        <label class="label" for="note">{{ __('Note') }}</label>
-                        <input class="field" type="text" name="note" id="note" value="{{ old('note') }}">
-                    </div>
-                    <div class="flex justify-end gap-2 border-t border-bean/10 pt-4 dark:border-white/10">
+                    </section>
+                    <div class="dialog-actions">
                         <button type="button" class="btn-secondary" x-data x-on:click="$dispatch('close-modal', 'collect-credit')">{{ __('Cancel') }}</button>
                         <button class="btn-primary" @disabled($openSales->isEmpty())>{{ __('Collect') }}</button>
                     </div>
