@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\InvestmentType;
+use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Models\Customer;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\Investment;
 use App\Models\MenuItem;
+use App\Models\Order;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Support\DailyProfitCalculator;
@@ -120,6 +122,16 @@ class DashboardController extends Controller
             ? $from->translatedFormat('D, M j Y')
             : $from->translatedFormat('M j Y').' – '.$to->translatedFormat('M j Y');
 
+        $pendingOrdersCount = 0;
+        if ($request->user()?->can('orders.view')) {
+            $pendingOrdersCount = Order::query()
+                ->whereIn('status', [
+                    OrderStatus::Pending->value,
+                    OrderStatus::Confirmed->value,
+                ])
+                ->count();
+        }
+
         return view('dashboard', [
             'from' => $fromDay,
             'to' => $toDay,
@@ -127,6 +139,7 @@ class DashboardController extends Controller
             'preset' => $preset,
             'dayCount' => $dayCount,
             'dateLabel' => $dateLabel,
+            'pendingOrdersCount' => $pendingOrdersCount,
             'stats' => $stats,
             'deltas' => [
                 'cash' => $stats['cash_collected'] - $previousStats['cash_collected'],

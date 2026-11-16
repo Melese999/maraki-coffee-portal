@@ -195,4 +195,57 @@
     .dialog-actions {
         @apply flex flex-wrap justify-end gap-2 border-t border-amber/20 pt-4;
     }
+
+    /* Public storefront */
+    .storefront-kenburns {
+        animation: storefront-kenburns 28s ease-in-out infinite alternate;
+        will-change: transform;
+    }
+
+    .storefront-rise {
+        animation: storefront-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .storefront-rise-delay-1 { animation-delay: 0.12s; }
+    .storefront-rise-delay-2 { animation-delay: 0.24s; }
+    .storefront-rise-delay-3 { animation-delay: 0.36s; }
+    .storefront-rise-delay-4 { animation-delay: 0.5s; }
+
+    .storefront-step {
+        @apply inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-bold transition;
+    }
+
+    .storefront-step-active {
+        @apply border-amber bg-amber text-obsidian;
+    }
+
+    .storefront-step-done {
+        @apply border-highland bg-highland text-white;
+    }
+
+    .storefront-step-idle {
+        @apply border-bean/20 bg-transparent text-bean dark:border-white/20 dark:text-parchment/50;
+    }
+
+    .storefront-choice {
+        @apply flex cursor-pointer flex-col gap-1 rounded-2xl border border-bean/15 bg-parchment-soft/70 p-4 transition dark:border-white/10 dark:bg-obsidian-soft;
+    }
+
+    .storefront-choice-active {
+        @apply border-amber bg-amber/10 shadow-soft dark:border-amber dark:bg-amber/10;
+    }
+
+    .storefront-menu-row {
+        @apply flex items-center gap-4 rounded-2xl border border-bean/10 bg-white/90 p-4 transition hover:border-amber/40 hover:shadow-soft dark:border-white/10 dark:bg-obsidian-card dark:hover:border-amber/40;
+    }
+}
+
+@keyframes storefront-kenburns {
+    from { transform: scale(1.05) translate3d(0, 0, 0); }
+    to { transform: scale(1.14) translate3d(-1.5%, -1%, 0); }
+}
+
+@keyframes storefront-rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
 }
