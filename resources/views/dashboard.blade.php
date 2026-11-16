@@ -11,6 +11,16 @@
 <x-app-layout>
     <x-slot name="header">{{ __('Analytics') }}</x-slot>
 
+    @if (($pendingOrdersCount ?? 0) > 0)
+        <a href="{{ route('orders.index', ['status' => 'pending']) }}" class="mb-5 flex items-center justify-between gap-3 rounded-2xl border border-amber/30 bg-amber/10 px-4 py-3 text-sm text-espresso transition hover:bg-amber/15 dark:text-parchment">
+            <span>
+                <span class="font-semibold">{{ __(':count new online orders', ['count' => $pendingOrdersCount]) }}</span>
+                <span class="text-bean dark:text-parchment/60"> — {{ __('Review pickup & delivery requests') }}</span>
+            </span>
+            <span class="font-semibold text-terracotta dark:text-amber">{{ __('Open orders') }} →</span>
+        </a>
+    @endif
+
     {{-- Date filter --}}
     <div class="mb-5 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-3">

@@ -13,12 +13,18 @@ use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\LoanPaymentController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\Storefront\LandingController;
+use App\Http\Controllers\Storefront\OrderController as StorefrontOrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login');
+Route::get('/', LandingController::class)->name('storefront.home');
+Route::get('/order', [StorefrontOrderController::class, 'create'])->name('storefront.order');
+Route::post('/order', [StorefrontOrderController::class, 'store'])->name('storefront.order.store');
+Route::get('/order/{orderNumber}', [StorefrontOrderController::class, 'show'])->name('storefront.orders.show');
 
 Route::get('/locale/{locale}', LocaleController::class)->name('locale.switch');
 
@@ -30,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sales', [SaleController::class, 'index'])->middleware('permission:sales.view')->name('sales.index');
     Route::post('/sales', [SaleController::class, 'store'])->middleware('permission:sales.create')->name('sales.store');
     Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->middleware('permission:sales.delete')->name('sales.destroy');
+
+    Route::get('/orders', [OrderController::class, 'index'])->middleware('permission:orders.view')->name('orders.index');
+    Route::patch('/orders/{order}', [OrderController::class, 'update'])->middleware('permission:orders.update')->name('orders.update');
 
     Route::get('/expenses', [ExpenseController::class, 'index'])->middleware('permission:expenses.view')->name('expenses.index');
     Route::post('/expenses', [ExpenseController::class, 'store'])->middleware('permission:expenses.create')->name('expenses.store');

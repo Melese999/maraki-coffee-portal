@@ -2,6 +2,7 @@
     $links = [
         ['route' => 'dashboard', 'label' => __('Home'), 'permission' => 'dashboard.view'],
         ['route' => 'sales.index', 'label' => __('Sales'), 'permission' => 'sales.view'],
+        ['route' => 'orders.index', 'label' => __('Orders'), 'permission' => 'orders.view'],
         ['route' => 'expenses.index', 'label' => __('Expenses'), 'permission' => 'expenses.view'],
         ['route' => 'menu-items.index', 'label' => __('Menu'), 'permission' => 'menu.view'],
         ['route' => 'credit.index', 'label' => __('Credit'), 'permission' => 'credit.view'],
@@ -13,7 +14,7 @@
         ['route' => 'admin.categories.index', 'label' => __('Categories'), 'permission' => 'categories.manage'],
     ];
 
-    $mobileKeys = ['dashboard', 'sales.index', 'expenses.index', 'credit.index', 'menu-items.index'];
+    $mobileKeys = ['dashboard', 'sales.index', 'orders.index', 'expenses.index', 'menu-items.index'];
 @endphp
 
 @foreach ($links as $link)
